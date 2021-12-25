@@ -2,7 +2,7 @@
   <div id="app">
 
     <div id="createNewTask">
-      <div @click="templateMode = 0">Date Night Ideas</div>
+      <div @click="templateMode = 0" class="header">Date Night Ideas</div>
     </div>
 
     <div class="tab restaurants" @click="loadIdeas('restaurant');restaurant.isActive = !restaurant.isActive">Restaurants</div>
@@ -117,7 +117,7 @@ export default {
     async loadIdeas(ideaString) {
       if (ideaString === 'restaurant') {
         let restaurants = await axios.get(
-          `http://localhost:5001/peytons-projects/us-central1/api/${ideaString}s`
+          `https://us-central1-peytons-projects.cloudfunctions.net/api/${ideaString}s`
         );
         this.db.restaurants = restaurants.data;
         let randomDateIndex = this.getRandomInt(this.db.restaurants.length);
@@ -125,26 +125,26 @@ export default {
       }
       if (ideaString === 'paid-idea') {
         let paidIdeas = await axios.get(
-          `http://localhost:5001/peytons-projects/us-central1/api/${ideaString}s`
+          `https://us-central1-peytons-projects.cloudfunctions.net/api/${ideaString}s`
         );
         this.db.paidIdeas = paidIdeas.data;
       }
       if (ideaString === 'free-idea') {
         let freeIdeas = await axios.get(
-          `http://localhost:5001/peytons-projects/us-central1/api/${ideaString}s`
+          `https://us-central1-peytons-projects.cloudfunctions.net/api/${ideaString}s`
         );
         this.db.freeIdeas = freeIdeas.data;
       }
       if (ideaString === 'at-home-idea') {
         let atHomeIdeas = await axios.get(
-          `http://localhost:5001/peytons-projects/us-central1/api/${ideaString}s`
+          `https://us-central1-peytons-projects.cloudfunctions.net/api/${ideaString}s`
         );
         this.db.atHomeIdeas = atHomeIdeas.data;
       }
     },
     async addIdea (newIdeaKey, ideaString) {
       await axios.post(
-        `http://localhost:5001/peytons-projects/us-central1/api/${ideaString}`,
+        `https://us-central1-peytons-projects.cloudfunctions.net/api/${ideaString}`,
         newIdeaKey
       );
       this.loadIdeas(ideaString);
@@ -153,7 +153,7 @@ export default {
     async updateStatus(ideaKey, ideaString) {
       ideaKey.isComplete = !ideaKey.isComplete;
       await axios.patch(
-        `http://localhost:5001/peytons-projects/us-central1/api/${ideaString}`,
+        `https://us-central1-peytons-projects.cloudfunctions.net/api/${ideaString}`,
         ideaKey
       );
       this.loadIdeas(ideaString);
@@ -161,14 +161,14 @@ export default {
     },
     async updateIdea(ideaKey, ideaString) {
       await axios.patch(
-        `http://localhost:5001/peytons-projects/us-central1/api/${ideaString}`,
+        `https://us-central1-peytons-projects.cloudfunctions.net/api/${ideaString}`,
         ideaKey
       );
       this.loadIdeas(ideaString);
     },
     async deleteIdea (ideaKey, ideaString) {
       await axios.delete(
-        `http://localhost:5001/peytons-projects/us-central1/api/${ideaString}?id=${ideaKey.id}`);
+        `https://us-central1-peytons-projects.cloudfunctions.net/api/${ideaString}?id=${ideaKey.id}`);
       this.loadIdeas(ideaString);
     },
     getRandomInt(max) {
@@ -206,9 +206,10 @@ export default {
   border-radius: 5px;
   font-weight: bold;
   color: #ffffff;
-  height: 30px;
+  height: 40px;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 .tab.restaurants {
   background-color:rgb(119, 207, 169);
@@ -271,4 +272,7 @@ export default {
   border: none;
   outline: none;
 }
+/* .header {
+  font-weight: bold;
+} */
 </style>
